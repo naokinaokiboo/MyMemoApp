@@ -1,0 +1,36 @@
+<h2>メモ詳細画面</h2>
+<h3><%= h @memo.title %></h3>
+<div class="disp-content">
+  <p><%= @memo.content %></p>
+</div>
+
+<table class="links-show-page">
+  <tbody>
+    <tr>
+      <td>
+        <% unless @prev_memo_id.nil? %>
+          <a href="/memos/<%= @prev_memo_id %>">&lt; 前のメモ</a>
+        <% end %>
+      </td>
+      <td>
+        <a href="/memos">メモ一覧</a>
+      </td>
+      <td>
+        <% unless @next_memo_id.nil? %>
+          <a href="/memos/<%= @next_memo_id %>">次のメモ &gt;</a>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="area-edit-delete">
+  <form class="inline-block-btn" method="get" action="/memos/<%= @memo.id %>/edit">
+    <input type="submit" value="Edit">
+  </form>
+
+  <form class="inline-block-btn" method="post" action="/memos/<%= @memo.id %>">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Delete">
+  </form>
+</div>

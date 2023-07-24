@@ -1,0 +1,20 @@
+<h2>メモ編集画面</h2>
+
+<form method="post" action="/memos/<%= @memo.id %>">
+  <div class="form-items__item">
+    <label>タイトル</label>
+    <input type="text" name="title" value="<%= h @memo.title %>" required>
+  </div>
+  <div class="form-items__item">
+    <label>メモ内容</label>
+    <textarea name="content" required><%= h @memo.content %></textarea>
+    <input type="hidden" name="_method" value="patch">
+  </div>
+  <div class="form-action">
+    <input type="submit" value="保存">
+  </div>
+</form>
+
+<div class="back-to-show">
+  <a href="/memos/<%= @memo.id %>">戻る</a>
+</div>
