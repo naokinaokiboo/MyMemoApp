@@ -43,7 +43,7 @@ class Memo
   end
 
   def initialize(title, content, id = nil)
-    @id = id.nil? ? SecureRandom.uuid : id
+    @id = id || SecureRandom.uuid
     @title = title
     @content = content
   end
