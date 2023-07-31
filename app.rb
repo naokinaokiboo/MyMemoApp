@@ -50,7 +50,7 @@ class Memo
 
   def add
     all_memos = Memo.load_json
-    all_memos << { 'id' => @id, 'title' => @title, 'content' => @content }
+    all_memos << { id: @id, title: @title, content: @content }
     write_to_json_file(all_memos)
   end
 
