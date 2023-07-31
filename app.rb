@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 require 'securerandom'
+require 'dotenv/load'
 
 NUM_OF_MEMOS_PER_PAGE = 3
 NUM_OF_PAGE_LINK_BEFORE_CURRENT = 3
@@ -80,7 +81,7 @@ end
 
 use Rack::Session::Cookie,
     expire_after: 3600,
-    secret: '240b204d-8239-4d61-9bc3-607718dc984b'
+    secret: ENV['SESSIONS_SECRET']
 
 helpers do
   def h(text)

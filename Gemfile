@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'webrick'
+gem 'dotenv-rails', groups: [:development, :test]
 
 group :development do
   gem 'erb_lint', require: false
