@@ -25,7 +25,7 @@ class Memo
     def find_by_id(id)
       all_memos = load_json
       target = all_memos.find { |memo| memo['id'] == id }
-      target.nil? ? nil : Memo.new(target['title'], target['content'], target['id'])
+      target && Memo.new(target['title'], target['content'], target['id'])
     end
 
     def load_json
