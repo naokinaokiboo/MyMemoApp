@@ -16,12 +16,10 @@ class Memo
 
   class << self
     def all
-      memo_objects = []
       all_memos = load_json
-      all_memos.each do |memo|
-        memo_objects << Memo.new(memo['title'], memo['content'], memo['id'])
+      all_memos.map do |memo|
+        Memo.new(memo['title'], memo['content'], memo['id'])
       end
-      memo_objects
     end
 
     def find_by_id(id)
