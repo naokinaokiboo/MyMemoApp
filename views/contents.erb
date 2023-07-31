@@ -1,5 +1,5 @@
 <h2>メモ一覧画面</h2>
-<% if @memo_objects.empty? %>
+<% if @memos.empty? %>
   <p class="no-note-msg">現在登録されているメモはありません</p>
 <% else %>
   <table class="memo-list">
@@ -7,7 +7,7 @@
       <tr><th>メモタイトル</th></tr>
     </thead>
     <tbody>
-      <% @memo_objects.each.with_index(1) do |memo, index| %>
+      <% @memos.each.with_index(1) do |memo, index| %>
         <% next if index < @first_index_to_display %>
         <% next if index > @last_index_to_display %>
         <tr>

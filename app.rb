@@ -109,7 +109,7 @@ get '/memos' do
   session[:page] = 1 if session[:page].nil?
   @current_page = session[:page].to_i
 
-  @memo_objects = Memo.all
+  @memos = Memo.all
   @first_index_to_display = NUM_OF_MEMOS_PER_PAGE * (@current_page - 1) + 1
   @last_index_to_display = NUM_OF_MEMOS_PER_PAGE * @current_page
 
@@ -125,17 +125,17 @@ get '/memos/new' do
 end
 
 get '/memos/:id' do |memo_id|
-  memo_objects = Memo.all
+  memos = Memo.all
   @memo, index = nil
-  memo_objects.each_with_index do |memo_ob, idx|
-    if memo_ob.id == memo_id
-      @memo = memo_ob
+  memos.each_with_index do |memo, idx|
+    if memo.id == memo_id
+      @memo = memo
       index = idx
     end
   end
 
-  @prev_memo_id = index.zero? ? nil : memo_objects[index - 1].id
-  @next_memo_id = index == memo_objects.size - 1 ? nil : memo_objects[index + 1].id
+  @prev_memo_id = index.zero? ? nil : memos[index - 1].id
+  @next_memo_id = index == memos.size - 1 ? nil : memos[index + 1].id
 
   erb :show
 end
