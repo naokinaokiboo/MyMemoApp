@@ -1,0 +1,61 @@
+<h2>メモ一覧画面</h2>
+<% if @memos.empty? %>
+  <p class="no-note-msg">現在登録されているメモはありません</p>
+<% else %>
+  <table class="memo-list">
+    <thead>
+      <tr><th>メモタイトル</th></tr>
+    </thead>
+    <tbody>
+      <% @memos.each.with_index(1) do |memo, index| %>
+        <% next if index < @first_index_to_display %>
+        <% next if index > @last_index_to_display %>
+        <tr>
+          <td>
+            <a href="/memos/<%= memo.id %>"><%= h memo.title %></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<table class="pagenation">
+  <tbody>
+    <% if @current_page > 1 %>
+      <td>
+        <a href="/memos/page=1">&lt;&lt;</a>
+      </td>
+      <td>
+        <a href="/memos/page=<%= @current_page - 1 %>">&lt;</a>
+      </td>
+    <% end %>
+
+    <% if @num_of_page > 1 %>
+      <% (@start_page_num..@end_page_num).each do |page_num| %>
+        <% next if page_num < 1 %>
+        <% next if page_num > @num_of_page %>
+        <% if page_num == @current_page %>
+          <td class="pagenation-current"><%= page_num %></td>
+        <% else %>
+          <td>
+            <a href="/memos/page=<%= page_num %>"><%= page_num %></a>
+          </td>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @current_page < @num_of_page %>
+      <td>
+        <a href="/memos/page=<%= @current_page + 1 %>">&gt;</a>
+      </td>
+      <td>
+        <a href="/memos/page=<%= @num_of_page %>">&gt;&gt;</a>
+      </td>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="add-btn">
+  <a href='/memos/new'>Add Memo</a>
+</div>
