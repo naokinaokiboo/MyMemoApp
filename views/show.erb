@@ -26,11 +26,11 @@
 
 <div class="area-edit-delete">
   <form class="inline-block-btn" method="get" action="/memos/<%= @memo.id %>/edit">
-    <input type="submit" value="Edit">
+    <input type="submit" value="編集">
   </form>
 
   <form class="inline-block-btn" method="post" action="/memos/<%= @memo.id %>">
     <input type="hidden" name="_method" value="delete">
-    <input type="submit" value="Delete">
+    <input type="submit" value="削除">
   </form>
 </div>

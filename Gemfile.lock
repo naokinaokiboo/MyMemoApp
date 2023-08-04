@@ -60,6 +60,7 @@ GEM
     parser (3.2.2.3)
       ast (~> 2.4.1)
       racc
+    pg (1.5.3)
     racc (1.7.1)
     rack (2.2.8)
     rack-protection (3.0.6)
@@ -131,6 +132,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv-rails
   erb_lint
+  pg
   rubocop
   rubocop-fjord
   sinatra
