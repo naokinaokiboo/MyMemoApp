@@ -130,6 +130,8 @@ get '/memos/:id' do |memo_id|
     end
   end
 
+  redirect_to_not_found if index.nil?
+
   @prev_memo_id = index.zero? ? nil : memos[index - 1].id
   @next_memo_id = index == memos.size - 1 ? nil : memos[index + 1].id
 
