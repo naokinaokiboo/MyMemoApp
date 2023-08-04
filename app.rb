@@ -27,6 +27,8 @@ class Memo
     end
 
     def find_by_id(id)
+      return nil unless uuid?(id)
+
       sql = "SELECT * FROM #{TABLE_NAME} WHERE id = $1;"
       result = execute(sql, [id])
       target = result.first
@@ -50,6 +52,13 @@ class Memo
 
       @connection.close
       @connection = nil
+    end
+
+    private
+
+    def uuid?(id)
+      uuid_pattern = /\h{8}-\h{4}-\h{4}-\h{4}-\h{12}/
+      uuid_pattern.match?(id)
     end
   end
 
