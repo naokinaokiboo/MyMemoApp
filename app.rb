@@ -5,12 +5,13 @@ require 'sinatra/reloader'
 require 'pg'
 require 'securerandom'
 require 'dotenv/load'
+require 'yaml'
 
 NUM_OF_MEMOS_PER_PAGE = 3
 NUM_OF_PAGE_LINK_BEFORE_CURRENT = 3
 NUM_OF_PAGE_LINK_AFTER_CURRENT = 3
-DATABASE_NAME = 'memo_app'
 TABLE_NAME = 'memos'
+DB_CONFIG_FILE = './database.yml'
 
 class Memo
   attr_reader :id
@@ -33,7 +34,8 @@ class Memo
     end
 
     def execute(sql, params = [])
-      @connection ||= PG::Connection.new(dbname: DATABASE_NAME)
+      @db_conf ||= YAML.load_file(DB_CONFIG_FILE)['db']
+      @connection ||= PG::Connection.new(@db_conf)
       @connection.exec_params(sql, params)
     end
 
