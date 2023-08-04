@@ -2,14 +2,15 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
-require 'json'
+require 'pg'
 require 'securerandom'
 require 'dotenv/load'
 
 NUM_OF_MEMOS_PER_PAGE = 3
 NUM_OF_PAGE_LINK_BEFORE_CURRENT = 3
 NUM_OF_PAGE_LINK_AFTER_CURRENT = 3
-JSON_FILE_PATH = './public/memos.json'
+DATABASE_NAME = 'memo_app'
+TABLE_NAME = 'memos'
 
 class Memo
   attr_reader :id
@@ -17,29 +18,36 @@ class Memo
 
   class << self
     def all
-      all_memos = load_json
+      sql = "SELECT * FROM #{TABLE_NAME} ORDER BY created_at;"
+      all_memos = execute(sql)
       all_memos.map do |memo|
         Memo.new(memo['title'], memo['content'], memo['id'])
       end
     end
 
     def find_by_id(id)
-      all_memos = load_json
-      target = all_memos.find { |memo| memo['id'] == id }
+      sql = "SELECT * FROM #{TABLE_NAME} WHERE id = $1;"
+      result = execute(sql, [id])
+      target = result.first
       target && Memo.new(target['title'], target['content'], target['id'])
     end
 
-    def load_json
-      unless File.exist?(JSON_FILE_PATH)
-        File.open(JSON_FILE_PATH, 'w') do |file|
-          file.write('[]')
-        end
-      end
-      JSON.load_file(JSON_FILE_PATH)
+    def execute(sql, params = [])
+      @connection ||= PG::Connection.new(dbname: DATABASE_NAME)
+      @connection.exec_params(sql, params)
     end
 
     def size
-      load_json.size
+      sql = "SELECT COUNT(*) FROM #{TABLE_NAME};"
+      result = execute(sql)
+      result.first['count'].to_i
+    end
+
+    def close_connection
+      return if @connection.nil?
+
+      @connection.close
+      @connection = nil
     end
   end
 
@@ -50,32 +58,18 @@ class Memo
   end
 
   def add
-    all_memos = Memo.load_json
-    all_memos << { id: @id, title: @title, content: @content }
-    write_to_json_file(all_memos)
+    sql = "INSERT INTO #{TABLE_NAME} (id, title, content) VALUES ($1, $2 ,$3);"
+    Memo.execute(sql, [@id, @title, @content])
   end
 
   def delete
-    all_memos = Memo.load_json
-    all_memos.delete_if { |memo| memo['id'] == @id }
-    write_to_json_file(all_memos)
+    sql = "DELETE FROM #{TABLE_NAME} WHERE id = $1;"
+    Memo.execute(sql, [@id])
   end
 
   def update
-    all_memos = Memo.load_json
-    target_memo = all_memos.find { |memo| memo['id'] == @id }
-    target_memo['title'] = @title
-    target_memo['content'] = @content
-
-    write_to_json_file(all_memos)
-  end
-
-  private
-
-  def write_to_json_file(all_memos)
-    File.open(JSON_FILE_PATH, 'w') do |file|
-      JSON.dump(all_memos, file)
-    end
+    sql = "UPDATE #{TABLE_NAME} SET title = $1, content = $2 WHERE id = $3;"
+    Memo.execute(sql, [@title, @content, @id])
   end
 end
 
@@ -87,6 +81,10 @@ helpers do
   def h(text)
     Rack::Utils.escape_html(text)
   end
+end
+
+after do
+  Memo.close_connection
 end
 
 get '/' do

@@ -2,10 +2,11 @@
 
 source 'https://rubygems.org'
 
+gem 'dotenv-rails', groups: %i[development test]
+gem 'pg'
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'webrick'
-gem 'dotenv-rails', groups: [:development, :test]
 
 group :development do
   gem 'erb_lint', require: false
