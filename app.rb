@@ -87,11 +87,6 @@ helpers do
   def h(text)
     Rack::Utils.escape_html(text)
   end
-
-  def redirect_to_not_found
-    # リダイレクト先URLに特別な意味はなく、存在しないURLであればよい
-    redirect('404_not_found')
-  end
 end
 
 get '/' do
@@ -181,4 +176,9 @@ end
 
 def calc_num_of_page
   (Memo.size / NUM_OF_MEMOS_PER_PAGE.to_f).ceil
+end
+
+def redirect_to_not_found
+  # リダイレクト先URLに特別な意味はなく、存在しないURLであればよい
+  redirect('404_not_found')
 end
